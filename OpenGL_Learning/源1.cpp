@@ -6,74 +6,44 @@
 #include "Game_Component.hpp"
 #include "Textures.hpp"
 
-//Ê¶±ğ°´¼üÊÇ·ñ±»°´ÏÂ
 #define KEY_DOWN(VK_NONAME) ((GetAsyncKeyState(VK_NONAME) & 0x8000) ? 1:0)
 using namespace std;
 
 static const int WIDTH = 1280, HEIGHT = 800;
-////Cat
-//static const std::string Cat_Texture= "C:/Users/xiewu/Desktop/Ñ§Ğ£Ïà¹Ø/¼ÆËã»úÍ¼ĞÎÑ§/Asserts/cat_15_13.png";
-//static const std::string cat_texture_stand_face_to_left = "cat_stand";
-//static const std::string cat_texture_stand_face_to_right = "cat_stand_1";
-//static const float cat_speed =3.0f;
-// Game_Part cat;
-////Ground
-//static const std::string ground_texture = "C:/Users/xiewu/Desktop/Ñ§Ğ£Ïà¹Ø/¼ÆËã»úÍ¼ĞÎÑ§/Asserts/ground_64_4.png";
-//static const std::string GROUND= "ground";
-//Game_Part ground;
-////Fish
-// static const std::string fish_texture=R"(C:\Users\xiewu\Desktop\Ñ§Ğ£Ïà¹Ø\¼ÆËã»úÍ¼ĞÎÑ§\Asserts\fish_15_16.png)";
-// static const std::string FISH = "fish";
-// Game_Part fish;
 
 float* normalizeColor(int Red, int Green, int Blue, int Alpha);
 namespace color {
-	float* g = normalizeColor(235, 231, 235, 0);//µ×É«
-	float* p = normalizeColor(221, 109, 80, 0);//¸±É«
-	float* b = normalizeColor(146, 32, 22, 0);//Ö÷É«
+	float* g = normalizeColor(235, 231, 235, 0);
+	//åº•è‰²
+	float* p = normalizeColor(221, 109, 80, 0);
+	//å‰¯è‰²
+	float* b = normalizeColor(146, 32, 22, 0);
+	//ä¸»è‰²
 }
-
-//void Create_cat() {
-//	cat .set(1, 4, 15, 13);
-//	cat.addATexture(Cat_Texture, cat_texture_stand_face_to_left);
-//	cat.addATexture(Cat_Texture, cat_texture_stand_face_to_right);
-//	float pos[8] = { 1.0f,0.0f,0.0f,0.0f,0.0f,1.0f,1.0f,1.0f };
-//	cat.setTexturePos(cat[cat_texture_stand_face_to_right], pos);
-//	cat.setTargetTexture(cat[cat_texture_stand_face_to_right]);
-//}
-//void Create_ground() {
-//	ground.set(0, 0, 64, 64);
-//	ground.addATexture(ground_texture, GROUND);
-//	ground.setTargetTexture(ground[GROUND]);
-//}
-//void Create_fish() {
-//	fish.set(4, 4, 15, 16);
-//	fish.addATexture(fish_texture, FISH);
-//	fish.setTargetTexture(fish[FISH]);
-//}
 Textures TEXTURE;
 
 Game_Component CAT;
-static const string cat_texture_file = R"(C:\Users\xiewu\Desktop\Ñ§Ğ£Ïà¹Ø\¼ÆËã»úÍ¼ĞÎÑ§\Asserts\cat_15_13.png)";
+static const string cat_texture_file = R"(D:\Asserts\cat_15_13.png)";
 static const string cat_stand_face_to_right = "C1";
 static const string cat_stand_face_to_left = "C2";
 
-//¶àÌùÍ¼¶ÔÏóĞèÒªÓµÓĞÁÙÊ±ÌùÍ¼±äÁ¿
+//å¤šè´´å›¾å¯¹è±¡éœ€è¦æ‹¥æœ‰ä¸´æ—¶è´´å›¾å˜é‡
 string cat_texture_temp;
-//¿É²Ù¿ØÎï¼şĞèÒªÉèÖÃÔË¶¯ËÙ¶È
+
+//å¯æ“æ§ç‰©ä»¶éœ€è¦è®¾ç½®è¿åŠ¨é€Ÿåº¦
 static const float cat_speed = 3.0f;
 
 Game_Component FISH;
 Game_Component FISH_1;
-static const string fish_texture_file = R"(C:\Users\xiewu\Desktop\Ñ§Ğ£Ïà¹Ø\¼ÆËã»úÍ¼ĞÎÑ§\Asserts\fish_16_16.png)";
+static const string fish_texture_file = R"(D:\Asserts\fish_16_16.png)";
 static const string fish = "F";
 
 Game_Component PUPI;
-static const string pupi_texture_file = R"(C:\Users\xiewu\Desktop\Ñ§Ğ£Ïà¹Ø\¼ÆËã»úÍ¼ĞÎÑ§\Asserts\pipe_16_16.png)";
+static const string pupi_texture_file = R"(D:\Asserts\pipe_16_16.png)";
 static const string pupi = "P";
 
 Game_Component BACKGROUND;
-static const string background_texture_file = R"(C:\Users\xiewu\Desktop\Ñ§Ğ£Ïà¹Ø\¼ÆËã»úÍ¼ĞÎÑ§\Asserts\QQ½ØÍ¼20221026134331.png)";
+static const string background_texture_file = R"(D:\Asserts\QQæˆªå›¾20221026134331.png)";
 static const string background = "G";
 
 void initTextures() {
@@ -113,7 +83,9 @@ void myReshape(GLsizei w, GLsizei h) {
 	glViewport(0, 0, w, h);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluOrtho2D(0, w/5, 0, h/5);//±£³ÖÎïÌå±ÈÀı
+	gluOrtho2D(0, w/5, 0, h/5);
+	
+	//ä¿æŒç‰©ä½“æ¯”ä¾‹
 }
 
 
@@ -129,7 +101,9 @@ void myDisplay() {
 	
 	glutSwapBuffers();
 }
-//ÒÀÕÕw a s d ²Ù×÷Ä£Ê½¶Ô¸øÓè±¾Ôª¼ş±»ÓÃ»§ÔÚ2dÏŞÖÆ£¨¾ØĞÎ£©¿Õ¼äÄÚÒÆ¶¯µÄÈ¨Àû
+
+//ä¾ç…§w a s d æ“ä½œæ¨¡å¼å¯¹ç»™äºˆæœ¬å…ƒä»¶è¢«ç”¨æˆ·åœ¨2dé™åˆ¶ï¼ˆçŸ©å½¢ï¼‰ç©ºé—´å†…ç§»åŠ¨çš„æƒåˆ©
+
 void character_control_2d(int x_min, int y_min, int x_max, int y_max, int speed) {
 	if ((KEY_DOWN('w') || KEY_DOWN('W'))&&CAT.getPos()[5]<=y_max) {
 		CAT.move(0, speed);
@@ -150,93 +124,6 @@ void myKeyBoardFunc_1(unsigned char key, int x, int y) {
 	character_control_2d(0, 0, WIDTH / 5, HEIGHT / 5, cat_speed);
 	glutPostRedisplay();
 }
-
-//void myKeyBoardFunc(unsigned char key, int x, int y) {
-//	switch (key)
-//	{
-//	case 'A':
-//	case 'a':
-//		if (CAT.getPos()[0] <= 0) {
-//			break;
-//		}
-//		cat_texture_temp=cat_stand_face_to_left;
-//		CAT.move(-cat_speed, 0);
-//		break;
-//	case 'D':
-//	case 'd':
-//		if (CAT.getPos()[2] >= WIDTH/5) {
-//			break;
-//		}
-//		cat_texture_temp=cat_stand_face_to_right;
-//		CAT.move(cat_speed, 0);
-//		break;
-//	case 'w':
-//	case 'W':
-//		if (CAT.getPos()[5] >= HEIGHT/5) {
-//			break;
-//		}
-//		CAT.move(0, cat_speed);
-//		break;
-//	case 's':
-//	case 'S':
-//		if (CAT.getPos()[1] <= 0) {
-//			break;
-//		}
-//		CAT.move(0, -cat_speed);
-//		break;
-//		
-//	default:
-//		break;
-//	}
-//	glutPostRedisplay(); //ÖØĞÂÖ´ĞĞmyDisplay·½·¨
-//}
-//void handleKeypress(unsigned char key, int x, int y)
-//{
-//	if (key == 'w')
-//	{
-//		for (int i = 0; i < 12; i++)
-//		{
-//			if (i == 1 || i == 7 || i == 10 || i == 4)
-//			{
-//				CAT.move(0, 1);
-//			}
-//		}
-//		glutPostRedisplay();
-//	}
-//	if (key == 'd')
-//	{
-//		for (int i = 0; i < 12; i++)
-//		{
-//			if (i == 0 || i % 3 == 0)
-//			{
-//				CAT.move(1, 0);
-//			}
-//		}
-//		glutPostRedisplay();
-//	}
-//	if (key == 's')
-//	{
-//		for (int i = 0; i < 12; i++)
-//		{
-//			if (i == 1 || i == 7 || i == 10 || i == 4)
-//			{
-//				CAT.move(0, -1);
-//			}
-//		}
-//		glutPostRedisplay();
-//	}
-//	if (key == 'a')
-//	{
-//		for (int i = 0; i < 12; i++)
-//		{
-//			if (i == 0 || i % 3 == 0)
-//			{
-//				CAT.move(-1, 0);
-//			}
-//		}
-//		glutPostRedisplay();
-//	}
-//}
 
 void init() {
 	
