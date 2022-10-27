@@ -1,5 +1,5 @@
 #pragma once
-#include <GL/glut.h>//Èô³ö´íÇë×ÔĞĞË÷Òı
+#include <GL/glut.h>//è‹¥å‡ºé”™è¯·è‡ªè¡Œç´¢å¼•
 #include <vector>
 #include <string>
 #include "stb_image.h"
@@ -8,31 +8,33 @@
 #include <algorithm>
 #include "Textures.hpp"
 
-//********Ê¹ÓÃËµÃ÷***********
-//1.ÀûÓÃ¹¹Ôìº¯Êı³õÊ¼»¯Î»ÖÃ¼°´óĞ¡
-//2.ÀûÓÃ addATexture ¸øÄ¿±êÌí¼ÓÌùÍ¼
-//3.ÀûÓÃ setTexturePosÉèÖÃ¸ÃÌùÍ¼ÎÆÀí×ø±ê
-//3.¸ù¾İĞèÒªµ÷ÓÃ move rotate zoomÈı¸ö·½·¨
-//4.Ê¹ÓÃ Draw·½·¨¿ª»­£¡
+//********ä½¿ç”¨è¯´æ˜***********
+//1.åˆ©ç”¨æ„é€ å‡½æ•°åˆå§‹åŒ–ä½ç½®åŠå¤§å°
+//2.åˆ©ç”¨ addATexture ç»™ç›®æ ‡æ·»åŠ è´´å›¾
+//3.åˆ©ç”¨ setTexturePosè®¾ç½®è¯¥è´´å›¾çº¹ç†åæ ‡
+//3.æ ¹æ®éœ€è¦è°ƒç”¨ move rotate zoomä¸‰ä¸ªæ–¹æ³•
+//4.ä½¿ç”¨ Drawæ–¹æ³•å¼€ç”»ï¼
 
-//×¢£º²¿·Ö×¢ÊÍÎªÊµÏÖ·½·¨£¬Çë×Ô¼º·Ö±æ
+//æ³¨ï¼šéƒ¨åˆ†æ³¨é‡Šä¸ºå®ç°æ–¹æ³•ï¼Œè¯·è‡ªå·±åˆ†è¾¨
 
 class Game_Component {
-	//´Ó×óÏÂ½Ç¿ªÊ¼ÄæÊ±ÕëĞı×ª
+	//ä»å·¦ä¸‹è§’å¼€å§‹é€†æ—¶é’ˆæ—‹è½¬
+
 	GLint pos[8];
 
 
 	int current_texture;
 
-	//³õÊ¼»¯¾ØÕó:(ÒÔÒ»Î¬Êı×é±íÊö¾ØÕó)
+	//åˆå§‹åŒ–çŸ©é˜µ:(ä»¥ä¸€ç»´æ•°ç»„è¡¨è¿°çŸ©é˜µ)
 	//a[n*k]={11,12......1k , 21, 22......2k , 31,32.........................nk} 
-	// Æ½ÒÆ¾ØÕóint T[9]={1,0,dx,0,1,dy,0,0,1};      n=3   k=3
-	// Ğı×ª¾ØÕóint R[9]={c,-s,0,s,c,0,0,0,1};         n=3    k=3      (ÒÔÔ­µãÎªĞı×ªÖĞĞÄ£©[ c=cos(angle) , s=sin(angle) ] 
-	// Ëõ·Å¾ØÕóint S[9]={sx,0,0,0,sy,0,0,0,1};		  n=3	k=3
-	// µã¡¤Ô­¾ØÕóint P[3]={x,y,1};    k=3    m=1
+	// å¹³ç§»çŸ©é˜µint T[9]={1,0,dx,0,1,dy,0,0,1};      n=3   k=3
+	// æ—‹è½¬çŸ©é˜µint R[9]={c,-s,0,s,c,0,0,0,1};         n=3    k=3      (ä»¥åŸç‚¹ä¸ºæ—‹è½¬ä¸­å¿ƒï¼‰[ c=cos(angle) , s=sin(angle) ] 
+	// ç¼©æ”¾çŸ©é˜µint S[9]={sx,0,0,0,sy,0,0,0,1};		  n=3	k=3
+	// ç‚¹Â·åŸçŸ©é˜µint P[3]={x,y,1};    k=3    m=1
 
 	//matrixA[n*k] * matrixB[k*m]
-	//±¾³ÌĞòÖĞ ·µ»Ø¾ØÕóÎª3*1Õó newX=p[1][1]    newY=p[2][1]
+	//æœ¬ç¨‹åºä¸­ è¿”å›çŸ©é˜µä¸º3*1é˜µ newX=p[1][1]    newY=p[2][1]
+
 	int** MultiplyMatrix(int a[], int b[], int n, int k, int m) {
 		int** c = new int* [n];
 		for (int i = 0; i < n; i++) {
@@ -55,9 +57,10 @@ public:
 		current_texture = 0;
 	}
 
-	//(x,y)Îª¾ØĞÎ×óÏÂ½Ç
+	//(x,y)ä¸ºçŸ©å½¢å·¦ä¸‹è§’
 	//(x1,y1)=(x,y) ; (x2,y2)=(x+width,y) ; (x3,y3)=(x+width,y+height) ; (x4,y4)=(x,y+height)
-	//set :: Ç¿ÖÆ¸üĞÂ
+	//set :: å¼ºåˆ¶æ›´æ–°
+
 	void set(int x, int y, int width, int height) {
 		pos[0] = x;
 		pos[1] = y;
@@ -69,12 +72,12 @@ public:
 		pos[7] = y + height;
 	}
 
-	//»ñÈ¡¼¸ºÎÖĞĞÄ
+	//è·å–å‡ ä½•ä¸­å¿ƒ
 	void getCenter(int& center_x, int& center_y) {
 		center_x = (pos[0] + pos[4]) / 2;
 		center_y = (pos[1] + pos[5]) / 2;
 	}
-	//ÒÆ¶¯ dx dyÎª¶ÔÓ¦Öá¸Ã±äÁ¿
+	//ç§»åŠ¨ dx dyä¸ºå¯¹åº”è½´è¯¥å˜é‡
 	void move(int dx, int dy) {
 		for (int i = 0; i < 8; i++) {
 			int T[9] = { 1,0,dx,0,1,dy,0,0,1 };
@@ -86,10 +89,11 @@ public:
 			i = k;
 		}
 	}
-	//ÏÈ°Ñ<Ğı×ªÖĞĞÄ>ÒÆµ½Ô­µã£¬Ğı×ªÍê±ÏÔÙÒÆ¶¯»ØÈ¥¡ª¡ª¡ªmove(-center_x,-center_y)¡ª¡ª>Ğı×ª¡ª¡ª>move(center_x,center_y)
-	void rotate(double angle_»¡¶ÈÖÆ, int center_x = 0, int center_y = 0) {
-		double c = std::cos(angle_»¡¶ÈÖÆ);
-		double s = std::sin(angle_»¡¶ÈÖÆ);
+	//å…ˆæŠŠ<æ—‹è½¬ä¸­å¿ƒ>ç§»åˆ°åŸç‚¹ï¼Œæ—‹è½¬å®Œæ¯•å†ç§»åŠ¨å›å»â€”â€”â€”move(-center_x,-center_y)â€”â€”>æ—‹è½¬â€”â€”>move(center_x,center_y)
+
+	void rotate(double angle, int center_x = 0, int center_y = 0) {
+		double c = std::cos(angle);
+		double s = std::sin(angle);
 		move(-center_x, -center_y);
 		for (int i = 0; i < 8; i++) {
 			int R[9] = { c,-s,0,s,c,0,0,0,1 };
@@ -102,7 +106,7 @@ public:
 		}
 		move(center_x, center_y);
 	}
-	//sx£ºx·½ÏòËõ·Å±¶ÂÊ   sy£ºy·½ÏòËõ·Å±¶ÂÊ
+	//sxï¼šxæ–¹å‘ç¼©æ”¾å€ç‡   syï¼šyæ–¹å‘ç¼©æ”¾å€ç‡
 	void zoom(int sx, int sy) {
 		for (int i = 0; i < 8; i++) {
 			int S[9] = { sx,0,0,0,sy,0,0,0,1 };
@@ -114,8 +118,8 @@ public:
 			i = k;
 		}
 	}
-	//Çëµ÷ÓÃTextureÀàÖĞµÄsetTexture
-	//¿ª»­£¡
+	//è¯·è°ƒç”¨Textureç±»ä¸­çš„setTexture
+	//å¼€ç”»ï¼
 	void draw(Textures &TEX,const unsigned int &target) {
 		GLuint texture;
 		Textures::tex_pos t;
@@ -136,8 +140,8 @@ public:
 		glVertex2f(pos[6], pos[7]);
 
 		glEnd();
-		glDisable(GL_TEXTURE_2D);	//½ûÖ¹Ê¹ÓÃÎÆÀí
-		//Ë«»º´æ½»»»»º´æÒÔÏÔÊ¾Í¼Ïñ
+		glDisable(GL_TEXTURE_2D);	//ç¦æ­¢ä½¿ç”¨çº¹ç†
+		//åŒç¼“å­˜äº¤æ¢ç¼“å­˜ä»¥æ˜¾ç¤ºå›¾åƒ
 		glutSwapBuffers();
 	}
 	GLint* getPos() {
